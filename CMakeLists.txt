@@ -2,14 +2,23 @@
 # Use of this source code is governed by the license that can be
 # found in the LICENSE file.
 
-add_library (display
-    ${CMAKE_CURRENT_SOURCE_DIR}/window.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/glfw_window.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/input_manager.cpp
-)
+cmake_minimum_required (VERSION 3.7)
 
-find_package(glfw3 3.3 REQUIRED)
+# Set Project name.
+project (WindowDemo)
 
-target_link_libraries(display glfw)
-target_include_directories(display PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+# C++ Compiler Settings.
+set (CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
+set(CMAKE_CXX_FLAGS "-std=gnu++17")
 
+# Set the include directories.
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+
+# Create main executable.
+add_executable(WindowDemo main.cpp)
+
+add_subdirectory(display)
+target_link_libraries(WindowDemo display)

@@ -4,7 +4,7 @@
 
 #include "window.hpp"
 #include "glfw_window.hpp"
-#include "core/logging/logging.hpp"
+#include <iostream>
 
 namespace display {
 
@@ -14,8 +14,8 @@ std::unique_ptr<Window> Window::create(const Window::Config& config, std::weak_p
     if (config.name.length() <= 0 ||
         config.width <= 0 ||
         config.height <= 0) {
-        CXL_LOG(ERROR) << "Invalid window config: " << config.name
-                       << " " << config.width << " " << config.height;
+        std::cerr << "Invalid window config: " << config.name
+                  << " " << config.width << " " << config.height << std::endl;
     }
 
     // Return a valid window type depending on the API used by the engine
@@ -24,7 +24,7 @@ std::unique_ptr<Window> Window::create(const Window::Config& config, std::weak_p
             return std::make_unique<GLFWWindow>(config, delegate);
         case Type::kSFML:
         default:
-            CXL_LOG(ERROR) << "Valid API type not found!";
+            std::cerr << "Valid API type not found!" << std::endl;
             return nullptr;
     }
 }

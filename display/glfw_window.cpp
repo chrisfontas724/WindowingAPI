@@ -5,8 +5,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include "display/glfw_window.hpp"
 #include "display/input_codes.hpp"
-#include "core/logging/logging.hpp"
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 namespace display {
 
@@ -107,7 +107,7 @@ static void mouseButtonCallback(GLFWwindow* window, int32_t button, int32_t acti
 }
 
 void monitorCallback(GLFWmonitor* monitor, int event) {
-    CXL_LOG(INFO) << "Monitor callback called for monitor " << glfwGetMonitorName(monitor);
+    std::cerr << "Monitor callback called for monitor " << glfwGetMonitorName(monitor) << std::endl;
     if (event == GLFW_CONNECTED) {
         // TODO: The monitor was connected
     }
@@ -141,7 +141,6 @@ GLFWWindow::GLFWWindow(const Config& config, std::weak_ptr<WindowDelegate> del)
     
     impl_ = std::make_unique<Impl>();
     impl_->window = glfwCreateWindow(config_.width, config_.height, config_.name.c_str(), nullptr, nullptr);
-    CXL_DCHECK(impl_->window);
 
     glfwSetWindowUserPointer(impl_->window, this);
     glfwSetFramebufferSizeCallback(impl_->window, framebufferResizeCallback);
@@ -180,16 +179,10 @@ std::vector<const char*> GLFWWindow::getExtensions() const {
     // TODO: Add if-statement for validation.        
     extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 
-    if (VLOG_IS_ON(5)) {
-        for (uint32_t i = 0; i < extensions.size(); i++) {
-            CXL_VLOG(5) << " Window has VK extension " <<  extensions[i];
-        }
-    }
     return extensions;
 }
 
 void GLFWWindow::getSize(int32_t* width, int32_t* height) {
-    CXL_DCHECK(width && height);
     glfwGetFramebufferSize(impl_->window, width, height);
 }
 

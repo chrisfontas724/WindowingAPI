@@ -6,7 +6,8 @@
 #define DISPLAY_INPUT_MANAGER_HPP_
 
 #include "display/input_codes.hpp"
-#include "core/logging/logging.hpp"
+#include <string>
+#include <map>
 #include <set>
 
 namespace display {

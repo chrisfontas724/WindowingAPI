@@ -1,9 +1,10 @@
-# Copyright 2019 Chris Fontas. All rights reserved.
-# Use of this source code is governed by the license that can be
-# found in the LICENSE file.
+// Copyright 2019 Chris Fontas. All rights reserved.
+// Use of this source code is governed by the license that can be
+// found in the LICENSE file.
 
 #include "display/window.hpp"
 #include "stdio.h"
+#include <iostream>
 
 class Delegate : public display::WindowDelegate {
 public:
@@ -11,24 +12,40 @@ public:
     // |WindowDelegate|
     void onUpdate() override { std::cout << "onUpdate" << std::endl; }
     
-    void onResize(int32_t width, int32_t height) override {}
+    void onResize(int32_t width, int32_t height) override {
+        std::cout << "onResize" << std::endl;
+    }
     
-    void onWindowMove(int32_t x, int32_t y) override {}
+    void onWindowMove(int32_t x, int32_t y) override {
+        std::cout << "onWindowMove" << std::endl;
+    }
     
-    void onStart(display::Window*) override {}
+    void onStart(display::Window*) override {
+        std::cout << "onStart" << std::endl;
+    }
     
-    void onClose() override {}
+    void onClose() override {
+        std::cout << "onClose" << std::endl;
+    }
 };
 
 int main(int arg, char** argv) {
     
     display::Window::Config config;
-    config.name = "Window Example"
-    config.width = config_.start_resolution_x;
-    config.height = config_.start_resolution_y;
+    config.name = "Window Example";
+    config.width = 1024;
+    config.height = 768;
     config.type =  display::Window::Type::kGLFW;
-    auto window = display::Window::create(config, std::make_shared<Delegate>());
+    auto delegate = std::make_shared<Delegate>();
+    auto window = display::Window::create(config, std::move(delegate));
+    std::cout << "Created window!" << std::endl;
     
+    if (!window->supports_vulkan()) {
+        std::cerr << "Window doesn't support vulkan.";
+        return 1;
+    }
+    
+    std::cout << "Begin loop!" << std::endl;
     while (!window->shouldClose()) {
         window->poll();
     }
