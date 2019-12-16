@@ -44,8 +44,8 @@ public:
         }
     }
 
-    bool key(KeyCode key) {
-        return key_state_map_.count(key) && key_state_map_[key] == KeyAction::kPressed;
+    bool key(KeyCode key) const {
+        return key_state_map_.count(key) && key_state_map_.at(key) == KeyAction::kPressed;
     }
 
     bool key_down(KeyCode key) const {

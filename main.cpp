@@ -6,6 +6,7 @@
 #include "stdio.h"
 #include <iostream>
 
+// Example dummy delegate class.
 class Delegate : public display::WindowDelegate {
 public:
     
@@ -29,6 +30,19 @@ public:
     }
 };
 
+// Example InputManager checks.
+void checkInput(const display::InputManager* input) {
+    if (input->key(display::KeyCode::A)) {
+        std::cout << "Pressed 'A'" << std::endl;
+    } else if (input->key(display::KeyCode::B)) {
+        std::cout << "Pressed 'B'" << std::endl;
+    } else if (input->key(display::KeyCode::C)) {
+        std::cout << "Pressed 'C'" << std::endl;
+    }
+    // etc...
+}
+
+// Set up a window with the delegate and start polling.
 int main(int arg, char** argv) {
     
     display::Window::Config config;
@@ -48,6 +62,7 @@ int main(int arg, char** argv) {
     std::cout << "Begin loop!" << std::endl;
     while (!window->shouldClose()) {
         window->poll();
+        checkInput(window->input_manager());
     }
 
     return 0;
