@@ -7,6 +7,7 @@
 
 #include <string>
 #include <stdint.h>
+#include <memory>
 #include "display/input_codes.hpp"
 
 namespace display {
@@ -16,10 +17,10 @@ class Window;
 // A class that inherits from |WindowDelegate| can override its
 // virtual member functions in order to perform specific tasks based
 // on information received from the window.
-class WindowDelegate : public std::enable_shared_from_this<WindowDelegate>{
+class WindowDelegate : public std::enable_shared_from_this<WindowDelegate> {
 public:
 
-    // Called whenever the window is polled.
+    // Called whenever the window is polled.s
     virtual void onUpdate() = 0;
 
     // Called when the window is resized. The |width| and |height|
@@ -39,6 +40,7 @@ public:
     // any cleanup work.
     virtual void onClose() = 0;
 };
+
 } // display
 
 #endif // DISPLAY_WINDOW_DELEGATE_HPP_

@@ -15,6 +15,7 @@ set(CMAKE_CXX_FLAGS "-std=gnu++17")
 
 # Set the include directories.
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(/usr/include)
 
 
 # Create main executable.
