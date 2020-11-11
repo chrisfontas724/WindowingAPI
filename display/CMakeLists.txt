@@ -10,7 +10,8 @@ add_library (display
 
 set(CMAKE_PREFIX_PATH "C:/Program Files (x86)/GLFW")
 find_package(glfw3 3.3 REQUIRED)
+find_package(Vulkan REQUIRED)
 
-target_link_libraries(display glfw)
+target_link_libraries(display Vulkan::Vulkan glfw)
 target_include_directories(display PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
