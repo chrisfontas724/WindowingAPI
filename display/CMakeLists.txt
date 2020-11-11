@@ -8,6 +8,7 @@ add_library (display
     ${CMAKE_CURRENT_SOURCE_DIR}/input_manager.cpp
 )
 
+set(CMAKE_PREFIX_PATH "C:/Program Files (x86)/GLFW")
 find_package(glfw3 3.3 REQUIRED)
 
 target_link_libraries(display glfw)
