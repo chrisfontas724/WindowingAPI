@@ -7,7 +7,7 @@
 
 #include "display/window_delegate.hpp"
 #include "display/input_manager.hpp"
-#include <vulkan.hpp>
+#include <vulkan/vulkan.hpp>
 
 
 namespace display {
