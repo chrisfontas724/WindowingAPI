@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
-#include "input_manager.hpp"
+#include <windowing/input_manager.hpp>
 
 namespace display {
 std::map<std::string, KeyCode> InputManager::key_names_map_ = {

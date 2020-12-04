@@ -5,7 +5,7 @@
 #ifndef DISPLAY_GLFW_WINDOW_HPP_
 #define DISPLAY_GLFW_WINDOW_HPP_
 
-#include "display/window.hpp"
+#include "windowing/window.hpp"
 
 namespace display {
 

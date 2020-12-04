@@ -3,8 +3,8 @@
 // found in the LICENSE file.
 
 #define GLFW_INCLUDE_VULKAN
-#include "display/glfw_window.hpp"
-#include "display/input_codes.hpp"
+#include "glfw_window.hpp"
+#include <windowing/input_codes.hpp>
 #include <GLFW/glfw3.h>
 #include <iostream>
 

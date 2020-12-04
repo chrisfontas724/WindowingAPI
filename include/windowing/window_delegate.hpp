@@ -8,7 +8,7 @@
 #include <string>
 #include <stdint.h>
 #include <memory>
-#include "display/input_codes.hpp"
+#include <windowing/input_codes.hpp>
 
 namespace display {
 class Window;

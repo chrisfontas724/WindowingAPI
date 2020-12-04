@@ -5,8 +5,8 @@
 #ifndef DISPLAY_WINDOW_HPP_
 #define DISPLAY_WINDOW_HPP_
 
-#include "display/window_delegate.hpp"
-#include "display/input_manager.hpp"
+#include <windowing/window_delegate.hpp>
+#include <windowing/input_manager.hpp>
 #include <vulkan/vulkan.hpp>
 
 

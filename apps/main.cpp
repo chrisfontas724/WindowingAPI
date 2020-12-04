@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
-#include "display/window.hpp"
+#include <windowing/window.hpp>
 #include "stdio.h"
 #include <iostream>
 

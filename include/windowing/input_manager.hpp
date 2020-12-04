@@ -5,7 +5,7 @@
 #ifndef DISPLAY_INPUT_MANAGER_HPP_
 #define DISPLAY_INPUT_MANAGER_HPP_
 
-#include "display/input_codes.hpp"
+#include <windowing/input_codes.hpp>
 #include <string>
 #include <map>
 #include <set>
