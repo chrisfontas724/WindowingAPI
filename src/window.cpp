@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 #include <windowing/window.hpp>
-#include "glfw_window.hpp"
+#include <windowing/glfw_window.hpp>
 #include <iostream>
 
 namespace display {

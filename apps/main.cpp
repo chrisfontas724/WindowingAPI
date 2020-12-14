@@ -54,10 +54,6 @@ int main(int arg, char** argv) {
     auto window = display::Window::create(config, std::move(delegate));
     std::cout << "Created window!" << std::endl;
     
-    if (!window->supports_vulkan()) {
-        std::cerr << "Window doesn't support vulkan.";
-        return 1;
-    }
     
     std::cout << "Begin loop!" << std::endl;
     while (!window->shouldClose()) {

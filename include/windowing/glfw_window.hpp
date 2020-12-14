@@ -6,6 +6,7 @@
 #define DISPLAY_GLFW_WINDOW_HPP_
 
 #include "windowing/window.hpp"
+#include <vulkan/vulkan.hpp>
 
 namespace display {
 
@@ -18,6 +19,9 @@ public:
     GLFWWindow(const Config& config, std::weak_ptr<WindowDelegate> delegate);
 
     ~GLFWWindow() override;
+
+    // |Window||
+    void accept(WindowVisitor* visitor) override;
 
     // |Window|
     Type type() override { return Type::kGLFW; }
@@ -32,13 +36,13 @@ public:
     bool shouldClose() const override;
     
     // |Window|
-    bool supports_vulkan() override;
+    bool supports_vulkan();
 
     // |Window|
-    std::vector<const char*> getExtensions() const override;
+    std::vector<const char*> getExtensions() const;
 
     // |Window|
-    vk::SurfaceKHR createVKSurface(const vk::Instance& instance) override;
+    vk::SurfaceKHR createVKSurface(const vk::Instance& instance);
 
 protected:
 

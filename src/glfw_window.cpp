@@ -3,8 +3,9 @@
 // found in the LICENSE file.
 
 #define GLFW_INCLUDE_VULKAN
-#include "glfw_window.hpp"
+#include <windowing/glfw_window.hpp>
 #include <windowing/input_codes.hpp>
+#include <windowing/window_visitor.hpp>
 #include <GLFW/glfw3.h>
 #include <iostream>
 
@@ -168,6 +169,11 @@ GLFWWindow::~GLFWWindow() {
 bool GLFWWindow::supports_vulkan() {
     return glfwVulkanSupported() == GLFW_TRUE;
 }
+
+void GLFWWindow::accept(WindowVisitor* visitor) {
+    visitor->visit(this);
+}
+
 
 std::vector<const char*> GLFWWindow::getExtensions() const {
     uint32_t glfwExtensionCount = 0;

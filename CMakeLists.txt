@@ -12,7 +12,6 @@ project(
   DESCRIPTION "A simple windowing library"
   LANGUAGES CXX)
 
-
 # Only do these if this is the main project, and not if it is included through add_subdirectory
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     #C++ Compiler Settings.
@@ -22,6 +21,8 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     set(CMAKE_CXX_FLAGS "-std=gnu++17")
 endif()
 
+find_package(Vulkan REQUIRED)
+include_directories(${Vulkan_INCLUDE_DIRS})
 
 add_subdirectory(apps)
 add_subdirectory(src)

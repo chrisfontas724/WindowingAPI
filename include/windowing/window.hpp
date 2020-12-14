@@ -7,10 +7,10 @@
 
 #include <windowing/window_delegate.hpp>
 #include <windowing/input_manager.hpp>
-#include <vulkan/vulkan.hpp>
-
 
 namespace display {
+
+class WindowVisitor;
 
 // Generic windowing class which abstracts away the implementation
 // details of a specific window implementation, such as GLFW. This
@@ -49,6 +49,8 @@ public:
     const InputManager* input_manager() const { return input_mngr_.get(); }
 
     WindowDelegate& delegate() const { return *delegate_.lock(); }
+
+    virtual void accept(WindowVisitor* visitor) = 0;
     
     virtual Type type() = 0;
 
@@ -57,14 +59,6 @@ public:
     virtual void poll() = 0;
 
     virtual bool shouldClose() const = 0;
-
-    //-------------Functions for Vulkan Support-------------//
-
-    virtual bool supports_vulkan() = 0;
-
-    virtual std::vector<const char*> getExtensions() const = 0;
-    
-    virtual vk::SurfaceKHR createVKSurface(const vk::Instance& instance) = 0;
 
 protected:
 
