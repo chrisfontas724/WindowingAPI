@@ -24,9 +24,6 @@ public:
     void accept(WindowVisitor* visitor) override;
 
     // |Window|
-    Type type() override { return Type::kGLFW; }
-
-    // |Window|
     void getSize(int32_t* width, int32_t* height) override;
 
     // |Window|

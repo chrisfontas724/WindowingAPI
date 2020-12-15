@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
-#include <windowing/window.hpp>
+#include <windowing/glfw_window.hpp>
 #include "stdio.h"
 #include <iostream>
 
@@ -49,9 +49,8 @@ int main(int arg, char** argv) {
     config.name = "Window Example";
     config.width = 1024;
     config.height = 768;
-    config.type =  display::Window::Type::kGLFW;
     auto delegate = std::make_shared<Delegate>();
-    auto window = display::Window::create(config, std::move(delegate));
+    auto window = std::make_shared<display::GLFWWindow>(config, std::move(delegate));
     std::cout << "Created window!" << std::endl;
     
     

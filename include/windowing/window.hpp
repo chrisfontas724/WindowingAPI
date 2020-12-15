@@ -20,13 +20,6 @@ class WindowVisitor;
 class Window {
 public: 
 
-    // Determines the windowing API to use. Currently only
-    // GLFW is supported, but this can be easily extended.
-    enum class Type {
-        kGLFW = 0,
-        kSFML = 1
-    };
-
     // Properties with with to initialize the window.
     // Parameters:
     // name: Title of the window displayed on the top bar
@@ -36,13 +29,7 @@ public:
         std::string name;
         uint32_t width;
         uint32_t height;
-        Type type;
     };
-
-    // Static function that creats a new unique instance of a
-    // display window based on the provided config and with the
-    // specified delegate that will be notified on window events.
-    static std::unique_ptr<Window> create(const Config& config, std::weak_ptr<WindowDelegate> delegate);
 
     virtual ~Window() = default;
 
@@ -52,8 +39,6 @@ public:
 
     virtual void accept(WindowVisitor* visitor) = 0;
     
-    virtual Type type() = 0;
-
     virtual void getSize(int32_t* width, int32_t* height) = 0;
 
     virtual void poll() = 0;

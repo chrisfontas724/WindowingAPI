@@ -17,7 +17,6 @@ set(HEADER_LIST
 add_library(windowing 
     glfw_window.cpp
     input_manager.cpp
-    window.cpp
     ${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
