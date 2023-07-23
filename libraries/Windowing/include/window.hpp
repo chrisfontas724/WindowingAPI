@@ -5,8 +5,8 @@
 #ifndef DISPLAY_WINDOW_HPP_
 #define DISPLAY_WINDOW_HPP_
 
-#include <windowing/window_delegate.hpp>
-#include <windowing/input_manager.hpp>
+#include "window_delegate.hpp"
+#include "input_manager.hpp"
 
 namespace display {
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
-#include <windowing/glfw_window.hpp>
+#include "glfw_window.hpp"
 #include "stdio.h"
 #include <iostream>
 

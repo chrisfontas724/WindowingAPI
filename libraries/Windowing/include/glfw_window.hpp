@@ -5,7 +5,7 @@
 #ifndef DISPLAY_GLFW_WINDOW_HPP_
 #define DISPLAY_GLFW_WINDOW_HPP_
 
-#include "windowing/window.hpp"
+#include "window.hpp"
 #include <vulkan/vulkan.hpp>
 
 namespace display {
