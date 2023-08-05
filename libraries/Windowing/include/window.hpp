@@ -26,7 +26,7 @@ public:
     // width/height: the dimensions of the window.
     // type: the windowing implementation to use.
     struct Config {
-        std::string name;
+        std::string title;
         uint32_t width;
         uint32_t height;
     };
@@ -44,6 +44,8 @@ public:
     virtual void poll() = 0;
 
     virtual bool shouldClose() const = 0;
+
+    virtual void set_title(const std::string& title) = 0;
 
 protected:
 

@@ -46,7 +46,7 @@ void checkInput(const display::InputManager* input) {
 int main(int arg, char** argv) {
     
     display::Window::Config config;
-    config.name = "Window Example";
+    config.title = "Window Example";
     config.width = 1024;
     config.height = 768;
     auto delegate = std::make_shared<Delegate>();

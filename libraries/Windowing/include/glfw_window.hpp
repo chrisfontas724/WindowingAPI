@@ -31,14 +31,13 @@ public:
 
     // |Window|
     bool shouldClose() const override;
+
+    void set_title(const std::string& title) override;
     
-    // |Window|
     bool supports_vulkan();
 
-    // |Window|
     std::vector<const char*> getExtensions() const;
 
-    // |Window|
     vk::SurfaceKHR createVKSurface(const vk::Instance& instance);
 
 protected:

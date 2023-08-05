@@ -141,7 +141,7 @@ GLFWWindow::GLFWWindow(const Config& config, std::weak_ptr<WindowDelegate> del)
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_FALSE);
     
     impl_ = std::make_unique<Impl>();
-    impl_->window = glfwCreateWindow(config_.width, config_.height, config_.name.c_str(), nullptr, nullptr);
+    impl_->window = glfwCreateWindow(config_.width, config_.height, config_.title.c_str(), nullptr, nullptr);
 
     glfwSetWindowUserPointer(impl_->window, this);
     glfwSetFramebufferSizeCallback(impl_->window, framebufferResizeCallback);
@@ -200,6 +200,10 @@ void GLFWWindow::poll() {
 
 bool GLFWWindow::shouldClose() const {
     return glfwWindowShouldClose(impl_->window);
+}
+
+void GLFWWindow::set_title(const std::string& title) {
+    glfwSetWindowTitle(impl_->window, title.c_str());
 }
 
 
