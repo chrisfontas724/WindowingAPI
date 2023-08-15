@@ -8,10 +8,22 @@
 #include <string>
 #include <stdint.h>
 #include <memory>
+#include <vector>
 #include "input_codes.hpp"
 
+#ifdef _WIN32
+#include <windows.h>
+using PlatformNativeWindowHandle = HWND;
+#elif defined(__linux__)
+#include <xcb/xcb.h>
+using PlatformNativeWindowHandle = xcb_window_t;
+#elif defined(__APPLE__)
+#import <AppKit/NSView.h>
+using PlatformNativeWindowHandle = NSView*;
+// Add other platform-specific types as needed
+#endif
+
 namespace display {
-class Window;
 
 // The WindowDelegate receives notifications from the |Window| class.
 // A class that inherits from |WindowDelegate| can override its
@@ -32,9 +44,10 @@ public:
     // of the top-left-hand corner of the window.
     virtual void onWindowMove(int32_t x, int32_t y) = 0;
 
-    // Called when the window is initialized. The |window| parameter
-    // is a pointer to the window we are currently the delegate of.
-    virtual void onStart(Window* window) = 0;
+    // Called when the window is initialized.
+    virtual void onStart(PlatformNativeWindowHandle handle,
+                         std::vector<const char*> extensions, 
+                         int32_t width, int32_t height) = 0;
 
     // Called when the window is closed. This is a good place to perform
     // any cleanup work.

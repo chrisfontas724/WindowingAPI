@@ -21,7 +21,9 @@ public:
         std::cout << "onWindowMove" << std::endl;
     }
     
-    void onStart(display::Window*) override {
+    void onStart(PlatformNativeWindowHandle handle,
+                 std::vector<const char*> extensions,
+                 int32_t width, int32_t height) override {
         std::cout << "onStart" << std::endl;
     }
     
@@ -32,13 +34,13 @@ public:
 
 // Example InputManager checks.
 void checkInput(const display::InputManager* input) {
-    if (input->key(display::KeyCode::A)) {
-        std::cout << "Pressed 'A'" << std::endl;
-    } else if (input->key(display::KeyCode::B)) {
-        std::cout << "Pressed 'B'" << std::endl;
-    } else if (input->key(display::KeyCode::C)) {
-        std::cout << "Pressed 'C'" << std::endl;
-    }
+    // if (input->key(display::KeyCode::A)) {
+    //     std::cout << "Pressed 'A'" << std::endl;
+    // } else if (input->key(display::KeyCode::B)) {
+    //     std::cout << "Pressed 'B'" << std::endl;
+    // } else if (input->key(display::KeyCode::C)) {
+    //     std::cout << "Pressed 'C'" << std::endl;
+    // }
     // etc...
 }
 

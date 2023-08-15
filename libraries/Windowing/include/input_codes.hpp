@@ -17,17 +17,22 @@ enum class KeyCode {
     _7, _8, _9, Space,
 };
 
-enum class KeyAction {
-    kPressed,
-    kReleased,
-    kRepeat
+enum class InputEventType {
+    KeyPressed,
+    KeyReleased,
+    MouseLeftButtonClicked,
+    MouseRightButtonClicked,
+    MouseMoved,
 };
 
-enum class MouseAction {
-    kLeftClick,
-    kRightClick,
-    kScroll,
+struct InputEvent {
+    InputEventType type;
+    KeyCode key;   
+    double mouseX; // Mouse X position (valid for MouseMoved events)
+    double mouseY; // Mouse Y position (valid for MouseMoved events)
+    // Add other data members as needed
 };
+
 
 } // display
 

@@ -27,4 +27,9 @@ const Window* Platform::getWindow() const {
     return window_.get();
 }
 
+std::queue<InputEvent> Platform::getInputEvents() {
+    return window_->input_manager()->getInputEvents();
+}
+
+
 } // display

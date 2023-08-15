@@ -9,20 +9,7 @@
 #include "input_manager.hpp"
 #include <vector>
 
-#ifdef _WIN32
-#include <windows.h>
-using PlatformNativeWindowHandle = HWND;
-#elif defined(__linux__)
-#include <xcb/xcb.h>
-using PlatformNativeWindowHandle = xcb_window_t;
-#elif defined(__APPLE__)
-#import <AppKit/NSView.h>
-using PlatformNativeWindowHandle = NSView*;
-// Add other platform-specific types as needed
-#endif
-
 namespace display {
-
 
 // Generic windowing class which abstracts away the implementation
 // details of a specific window implementation, such as GLFW. This
@@ -45,7 +32,7 @@ public:
 
     virtual ~Window() = default;
 
-    const InputManager* input_manager() const { return input_mngr_.get(); }
+    InputManager* input_manager() { return input_mngr_.get(); }
     WindowDelegate& delegate() { return *delegate_.lock(); }
 
     virtual void start() = 0;
@@ -58,12 +45,6 @@ public:
 
     virtual bool shouldClose() const = 0;
 
-    virtual void set_title(const std::string& title) = 0;
-
-    virtual PlatformNativeWindowHandle getNativeWindowHandle() const = 0;
-
-    virtual std::vector<const char *> getExtensions() const = 0;
-
 protected:
 
     Window(const Config& config, std::weak_ptr<WindowDelegate> delegate)
@@ -71,10 +52,6 @@ protected:
     , delegate_(delegate)
     , input_mngr_(std::make_unique<InputManager>())
     {}
-
-    void updateInput() {
-        input_mngr_->update();
-    }
 
     Config config_;
     std::weak_ptr<WindowDelegate> delegate_;

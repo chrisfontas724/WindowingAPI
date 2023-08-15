@@ -6,6 +6,7 @@
 #define DISPLAY_PLATFORM_HPP_
 
 #include "window.hpp"
+#include <queue>
 
 namespace display {
 
@@ -16,6 +17,8 @@ public:
     ~Platform();
 
     void runEventLoop();
+
+    std::queue<InputEvent> getInputEvents();
 
     const Window* getWindow() const;
 

@@ -10,6 +10,7 @@
 #include <GLFW/glfw3native.h>
 
 #include <iostream>
+#include <map>
 
 namespace display {
 
@@ -77,10 +78,9 @@ static std::map<uint32_t, KeyCode> key_mapping = {
     {GLFW_KEY_9, KeyCode::_9},
 };
 
-static std::map<uint32_t, KeyAction> action_mapping = {
-    {GLFW_PRESS,   KeyAction::kPressed},
-    {GLFW_RELEASE, KeyAction::kReleased},
-    {GLFW_REPEAT,  KeyAction::kRepeat},
+static std::map<uint32_t, InputEventType> action_mapping = {
+    {GLFW_PRESS,   InputEventType::KeyPressed},
+    {GLFW_RELEASE, InputEventType::KeyReleased},
 };
 
 static void framebufferResizeCallback(GLFWwindow* window, int32_t width, int32_t height) {
@@ -95,14 +95,19 @@ static void windowPositionCallback(GLFWwindow* window, int32_t x, int32_t y) {
 
 static void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
     auto wrapper = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(window));
-    auto input_manager = const_cast<InputManager*>(wrapper->input_manager());
-    input_manager->set_mouse_position(xpos, ypos);
+    InputEvent event; 
+    event.type = InputEventType::MouseMoved;
+    event.mouseX = xpos;
+    event.mouseY = ypos;
+    wrapper->input_manager()->enqueueEvent(event);
 }
 
 static void keyCallback(GLFWwindow* window, int32_t key, int32_t scancode, int32_t action, int32_t mods) {
     auto wrapper = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(window));
-    auto input_manager = const_cast<InputManager*>(wrapper->input_manager());
-    input_manager->set_key_and_action(key_mapping[key], action_mapping[action]);
+    InputEvent event; 
+    event.type = action_mapping[action];
+    event.key = key_mapping[key];
+    wrapper->input_manager()->enqueueEvent(event);
 }
 
 static void mouseButtonCallback(GLFWwindow* window, int32_t button, int32_t action, int32_t mods) {
@@ -161,7 +166,9 @@ GLFWWindow::~GLFWWindow() {
 }
 
 void GLFWWindow::start() {
-    delegate().onStart(this);
+    int32_t width, height;
+    getSize(&width, &height);
+    delegate().onStart(getNativeWindowHandle(), getExtensions(), width, height);
 }
 
 void GLFWWindow::terminate() {
@@ -176,13 +183,7 @@ std::vector<const char*> GLFWWindow::getExtensions() const {
     uint32_t glfwExtensionCount = 0;
     const char** glfwExtensions;
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-        
-    std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
-
-    // TODO: Add if-statement for validation.        
-    extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-
-    return extensions;
+    return std::vector<const char*>(glfwExtensions, glfwExtensions + glfwExtensionCount);
 }
 
 void GLFWWindow::getSize(int32_t* width, int32_t* height) const {
@@ -190,17 +191,12 @@ void GLFWWindow::getSize(int32_t* width, int32_t* height) const {
 }
 
 void GLFWWindow::poll() {
-    updateInput();
     glfwPollEvents();
     delegate().onUpdate();
 }
 
 bool GLFWWindow::shouldClose() const {
     return glfwWindowShouldClose(impl_->window);
-}
-
-void GLFWWindow::set_title(const std::string& title) {
-    glfwSetWindowTitle(impl_->window, title.c_str());
 }
 
 PlatformNativeWindowHandle GLFWWindow::getNativeWindowHandle() const {

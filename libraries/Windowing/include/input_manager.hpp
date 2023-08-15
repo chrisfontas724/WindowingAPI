@@ -1,4 +1,4 @@
-// Copyright 2019 Chris Fontas. All rights reserved.
+// Copyright 2023 Chris Fontas. All rights reserved.
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
@@ -6,88 +6,55 @@
 #define DISPLAY_INPUT_MANAGER_HPP_
 
 #include "input_codes.hpp"
-#include <string>
+#include <queue>
+#include <chrono>
+#include <mutex>
 #include <map>
-#include <set>
 
 namespace display {
 
-// Input manager with portable key representations. Is used in
-// conjunction with the |Window| class so that the key codes
-// for any one particular window API, such as GLFW or SFML are
-// both mapped onto the same key codes used here, allowing for
-// client code to stay the same even when changing the underlying
-// windowing API.
 class InputManager {
 public:
 
-    static const std::map<std::string, KeyCode>& key_names_map() {
-        return key_names_map_;
-    }
+    void enqueueEvent(const InputEvent& event) {
+        std::lock_guard<std::mutex> lock(event_mutex_);
 
-    void set_mouse_position(float x, float y) {
-        mouse_position_ = std::make_pair(x,y);
-    }
-
-    float mouse_x() const {
-        return mouse_position_.first;
-    }
-
-    float mouse_y() const {
-        return mouse_position_.second;
-    }
-
-    void set_key_and_action(KeyCode key, KeyAction action) {
-        key_action_map_[action].insert(key);
-        if (action != KeyAction::kRepeat) {
-            key_state_map_[key] = action;
+        if (isThrottled(event)) {
+            return; // Ignore the event
         }
+
+        event_queue_.push(event);
     }
 
-    bool key(KeyCode key) const {
-        return key_state_map_.count(key) && key_state_map_.at(key) == KeyAction::kPressed;
-    }
-
-    bool key_down(KeyCode key) const {
-        if (!key_action_map_.count(KeyAction::kPressed)) {
-            return false;
-        }
-        auto& set = key_action_map_.at(KeyAction::kPressed);
-        return set.find(key) != set.end();
-    }
-
-    bool key_up(KeyCode key) const {
-        if (!key_action_map_.count(KeyAction::kReleased)) {
-            return false;
-        }
-        auto& set = key_action_map_.at(KeyAction::kReleased);
-        return set.find(key) != set.end();
-    }
-
-    uint32_t pending_actions() {
-        return key_action_map_.size();
+    std::queue<InputEvent> getInputEvents() {
+        std::lock_guard<std::mutex> lock(event_mutex_);
+        std::queue<InputEvent> events = std::move(event_queue_);
+        return events;
     }
 
 private:
     friend class Window;
-
-    std::map<KeyAction, std::set<KeyCode>> key_action_map_;
-    std::map<KeyCode, KeyAction> key_state_map_;
-
-    std::pair<float,float> mouse_position_;
-
     static std::map<std::string, KeyCode> key_names_map_;
 
-    // Clear the action map every frame, but the state
-    // map should persist.
-    bool update() {
-        for (auto& iter : key_action_map_) {
-           iter.second.clear();
+    std::queue<InputEvent> event_queue_;
+    std::mutex event_mutex_;
+
+    bool isThrottled(const InputEvent& event) {
+        auto now = std::chrono::steady_clock::now();
+        auto timeSinceLastEvent = now - last_event_time_;
+
+        if (timeSinceLastEvent < throttle_duration_) {
+            return true; // Event is within the throttle duration, so throttle it
         }
-        return true; 
+
+        last_event_time_ = now;
+        return false; // Event is not throttled
     }
 
+    std::chrono::steady_clock::time_point last_event_time_;
+    const std::chrono::milliseconds throttle_duration_ = std::chrono::milliseconds(200); 
 };
+
 } // display
 
 

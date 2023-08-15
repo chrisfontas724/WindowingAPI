@@ -35,17 +35,14 @@ public:
     // |Window|
     bool shouldClose() const override;
 
-    // |Window|
-    void set_title(const std::string& title) override;
-    
-    // Window|
-    PlatformNativeWindowHandle getNativeWindowHandle() const override;
-
-    std::vector<const char*> getExtensions() const override;
-
 protected:
 
     GLFWWindow() = delete;
+
+    PlatformNativeWindowHandle getNativeWindowHandle() const;
+
+    std::vector<const char*> getExtensions() const;
+
     bool supports_vulkan();
 
     struct Impl;
