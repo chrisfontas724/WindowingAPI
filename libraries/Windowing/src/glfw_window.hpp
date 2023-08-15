@@ -20,11 +20,14 @@ public:
 
     ~GLFWWindow() override;
 
-    // |Window||
-    void accept(WindowVisitor* visitor) override;
+    // |Window|
+    void start() override;
 
     // |Window|
-    void getSize(int32_t* width, int32_t* height) override;
+    void terminate() override;
+
+    // |Window|
+    void getSize(int32_t* width, int32_t* height) const override;
 
     // |Window|
     void poll() override;
@@ -32,17 +35,18 @@ public:
     // |Window|
     bool shouldClose() const override;
 
+    // |Window|
     void set_title(const std::string& title) override;
     
-    bool supports_vulkan();
+    // Window|
+    PlatformNativeWindowHandle getNativeWindowHandle() const override;
 
-    std::vector<const char*> getExtensions() const;
-
-    vk::SurfaceKHR createVKSurface(const vk::Instance& instance);
+    std::vector<const char*> getExtensions() const override;
 
 protected:
 
     GLFWWindow() = delete;
+    bool supports_vulkan();
 
     struct Impl;
     std::unique_ptr<Impl> impl_;

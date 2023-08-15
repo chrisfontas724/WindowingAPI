@@ -3,10 +3,12 @@
 // found in the LICENSE file.
 
 #define GLFW_INCLUDE_VULKAN
+#define GLFW_EXPOSE_NATIVE_WIN32
 #include "glfw_window.hpp"
 #include "input_codes.hpp"
-#include "window_visitor.hpp"
 #include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+
 #include <iostream>
 
 namespace display {
@@ -124,7 +126,7 @@ void scrollCallback(GLFWwindow* window, double x_offset, double y_offset) {
 
 static void windowCloseCallback(GLFWwindow* window) {
     auto wrapper = reinterpret_cast<GLFWWindow*>(glfwGetWindowUserPointer(window));
-    wrapper->delegate().onClose();
+    wrapper->terminate();
 }
 
 } // anonymous namespace
@@ -152,28 +154,23 @@ GLFWWindow::GLFWWindow(const Config& config, std::weak_ptr<WindowDelegate> del)
     glfwSetScrollCallback(impl_->window, scrollCallback);
     glfwSetWindowCloseCallback(impl_->window, windowCloseCallback);
     glfwSetMonitorCallback(monitorCallback);
-
-    // Notify the delegate the window has been created.
-    delegate().onStart(this);
-
-    // Update the delegate with the framebuffer width and height.
-    int32_t width, height;
-    getSize(&width, &height);
-    delegate().onResize(width, height);
 }
 
 GLFWWindow::~GLFWWindow() {
     impl_.reset();
 }
 
+void GLFWWindow::start() {
+    delegate().onStart(this);
+}
+
+void GLFWWindow::terminate() {
+    delegate().onClose();
+}
+
 bool GLFWWindow::supports_vulkan() {
     return glfwVulkanSupported() == GLFW_TRUE;
 }
-
-void GLFWWindow::accept(WindowVisitor* visitor) {
-    visitor->visit(this);
-}
-
 
 std::vector<const char*> GLFWWindow::getExtensions() const {
     uint32_t glfwExtensionCount = 0;
@@ -188,7 +185,7 @@ std::vector<const char*> GLFWWindow::getExtensions() const {
     return extensions;
 }
 
-void GLFWWindow::getSize(int32_t* width, int32_t* height) {
+void GLFWWindow::getSize(int32_t* width, int32_t* height) const {
     glfwGetFramebufferSize(impl_->window, width, height);
 }
 
@@ -206,15 +203,16 @@ void GLFWWindow::set_title(const std::string& title) {
     glfwSetWindowTitle(impl_->window, title.c_str());
 }
 
-
-vk::SurfaceKHR GLFWWindow::createVKSurface(const vk::Instance& instance) {
-    // create surface.
-    VkSurfaceKHR surface;
-    VkResult res = glfwCreateWindowSurface(static_cast<VkInstance>(instance), impl_->window, nullptr, &surface);
-    if (res != VK_SUCCESS) {
-        throw std::runtime_error("Failed to create window surface: ");
-    }
-    return vk::SurfaceKHR(surface);
+PlatformNativeWindowHandle GLFWWindow::getNativeWindowHandle() const {
+#ifdef _WIN32
+    return glfwGetWin32Window(impl_->window);
+#elif defined(__linux__)
+    return glfwGetX11Window(impl_->window);
+#elif defined(__APPLE__)
+    return glfwGetCocoaWindow(impl_->window);
+#else
+    return nullptr; // Handle other platforms if needed
+#endif
 }
 
 } // display

@@ -1,4 +1,4 @@
-// Copyright 2019 Chris Fontas. All rights reserved.
+// Copyright 2023 Chris Fontas. All rights reserved.
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
@@ -7,10 +7,22 @@
 
 #include "window_delegate.hpp"
 #include "input_manager.hpp"
+#include <vector>
+
+#ifdef _WIN32
+#include <windows.h>
+using PlatformNativeWindowHandle = HWND;
+#elif defined(__linux__)
+#include <xcb/xcb.h>
+using PlatformNativeWindowHandle = xcb_window_t;
+#elif defined(__APPLE__)
+#import <AppKit/NSView.h>
+using PlatformNativeWindowHandle = NSView*;
+// Add other platform-specific types as needed
+#endif
 
 namespace display {
 
-class WindowVisitor;
 
 // Generic windowing class which abstracts away the implementation
 // details of a specific window implementation, such as GLFW. This
@@ -34,18 +46,23 @@ public:
     virtual ~Window() = default;
 
     const InputManager* input_manager() const { return input_mngr_.get(); }
+    WindowDelegate& delegate() { return *delegate_.lock(); }
 
-    WindowDelegate& delegate() const { return *delegate_.lock(); }
+    virtual void start() = 0;
 
-    virtual void accept(WindowVisitor* visitor) = 0;
-    
-    virtual void getSize(int32_t* width, int32_t* height) = 0;
+    virtual void terminate() = 0;
+
+    virtual void getSize(int32_t* width, int32_t* height) const = 0;
 
     virtual void poll() = 0;
 
     virtual bool shouldClose() const = 0;
 
     virtual void set_title(const std::string& title) = 0;
+
+    virtual PlatformNativeWindowHandle getNativeWindowHandle() const = 0;
+
+    virtual std::vector<const char *> getExtensions() const = 0;
 
 protected:
 

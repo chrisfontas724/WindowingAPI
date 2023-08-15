@@ -27,6 +27,7 @@ target_sources(${PROJECT_NAME}
     PRIVATE
         src/glfw_window.cpp
         src/input_manager.cpp
+        src/platform.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -42,24 +43,14 @@ target_include_directories(${PROJECT_NAME}
 
 # without it public headers won't get installed
 set(public_headers
-    include/glfw_window.hpp
     include/input_codes.hpp 
     include/input_manager.hpp
     include/window_delegate.hpp
-    include/window_visitor.hpp 
     include/window.hpp
 )
-
-# not for MSVC
-#if(CMAKE_COMPILER_IS_GNUCXX)
-    # compile options for this target only
-    # treat warnings as errors
-    #target_compile_options(${PROJECT_NAME} PRIVATE -Werror)
-#endif()
 
 target_link_libraries(Windowing PUBLIC Vulkan::Vulkan glfw)
 
 # where to find our CMake modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-#message(STATUS "CMake module path: ${CMAKE_MODULE_PATH}")
 include(Installing)

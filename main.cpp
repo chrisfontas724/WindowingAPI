@@ -2,7 +2,7 @@
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
-#include "glfw_window.hpp"
+#include "platform.hpp"
 #include "stdio.h"
 #include <iostream>
 
@@ -50,16 +50,9 @@ int main(int arg, char** argv) {
     config.width = 1024;
     config.height = 768;
     auto delegate = std::make_shared<Delegate>();
-    auto window = std::make_shared<display::GLFWWindow>(config, std::move(delegate));
-    std::cout << "Created window!" << std::endl;
-    
-    
-    std::cout << "Begin loop!" << std::endl;
-    while (!window->shouldClose()) {
-        window->poll();
-        checkInput(window->input_manager());
-    }
 
+    auto platform = std::make_unique<display::Platform>(config, delegate);
+    platform->runEventLoop();
     return 0;
 }
 
