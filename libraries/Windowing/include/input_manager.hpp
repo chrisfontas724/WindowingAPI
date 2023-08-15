@@ -16,15 +16,7 @@ namespace display {
 class InputManager {
 public:
 
-    void enqueueEvent(const InputEvent& event) {
-        std::lock_guard<std::mutex> lock(event_mutex_);
-
-        if (isThrottled(event)) {
-            return; // Ignore the event
-        }
-
-        event_queue_.push(event);
-    }
+    void enqueueEvent(const InputEvent& event);
 
     std::queue<InputEvent> getInputEvents() {
         std::lock_guard<std::mutex> lock(event_mutex_);
@@ -38,21 +30,11 @@ private:
 
     std::queue<InputEvent> event_queue_;
     std::mutex event_mutex_;
-
-    bool isThrottled(const InputEvent& event) {
-        auto now = std::chrono::steady_clock::now();
-        auto timeSinceLastEvent = now - last_event_time_;
-
-        if (timeSinceLastEvent < throttle_duration_) {
-            return true; // Event is within the throttle duration, so throttle it
-        }
-
-        last_event_time_ = now;
-        return false; // Event is not throttled
-    }
-
     std::chrono::steady_clock::time_point last_event_time_;
     const std::chrono::milliseconds throttle_duration_ = std::chrono::milliseconds(200); 
+
+    bool isThrottled(const InputEvent& event);
+
 };
 
 } // display

@@ -45,5 +45,27 @@ std::map<std::string, KeyCode> InputManager::key_names_map_ = {
     { "Keypad9", KeyCode::_9 },
 };
 
+void InputManager::enqueueEvent(const InputEvent& event) {
+    std::lock_guard<std::mutex> lock(event_mutex_);
+
+    if (isThrottled(event)) {
+        return; // Ignore the event
+    }
+
+    event_queue_.push(event);
+}
+
+bool InputManager::isThrottled(const InputEvent& event) {
+    auto now = std::chrono::steady_clock::now();
+    auto timeSinceLastEvent = now - last_event_time_;
+
+    if (timeSinceLastEvent < throttle_duration_) {
+        return true; // Event is within the throttle duration, so throttle it
+    }
+
+    last_event_time_ = now;
+    return false; // Event is not throttled
+}
+
 
 } // display
