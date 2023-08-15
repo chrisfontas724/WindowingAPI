@@ -18,11 +18,7 @@ public:
 
     void enqueueEvent(const InputEvent& event);
 
-    std::queue<InputEvent> getInputEvents() {
-        std::lock_guard<std::mutex> lock(event_mutex_);
-        std::queue<InputEvent> events = std::move(event_queue_);
-        return events;
-    }
+    std::queue<InputEvent> getInputEvents();
 
 private:
     friend class Window;

@@ -55,6 +55,12 @@ void InputManager::enqueueEvent(const InputEvent& event) {
     event_queue_.push(event);
 }
 
+std::queue<InputEvent> InputManager::getInputEvents() {
+    std::lock_guard<std::mutex> lock(event_mutex_);
+    std::queue<InputEvent> events = std::move(event_queue_);
+    return events;
+}
+
 bool InputManager::isThrottled(const InputEvent& event) {
     auto now = std::chrono::steady_clock::now();
     auto timeSinceLastEvent = now - last_event_time_;
