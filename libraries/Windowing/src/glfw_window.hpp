@@ -6,7 +6,6 @@
 #define DISPLAY_GLFW_WINDOW_HPP_
 
 #include "window.hpp"
-#include <vulkan/vulkan.hpp>
 
 namespace display {
 
@@ -42,8 +41,6 @@ protected:
     PlatformNativeWindowHandle getNativeWindowHandle() const;
 
     std::vector<const char*> getExtensions() const;
-
-    bool supports_vulkan();
 
     struct Impl;
     std::unique_ptr<Impl> impl_;

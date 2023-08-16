@@ -21,7 +21,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(${PROJECT_NAME} STATIC)
 
 find_package(glfw3 3.3 REQUIRED)
-find_package(Vulkan REQUIRED)
 
 target_sources(${PROJECT_NAME}
     PRIVATE
@@ -51,7 +50,7 @@ set(public_headers
     include/window_types.hpp
 )
 
-target_link_libraries(Windowing PUBLIC Vulkan::Vulkan glfw)
+target_link_libraries(Windowing PUBLIC glfw)
 
 # where to find our CMake modules
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

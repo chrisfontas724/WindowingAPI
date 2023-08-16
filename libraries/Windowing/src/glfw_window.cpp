@@ -2,8 +2,9 @@
 // Use of this source code is governed by the license that can be
 // found in the LICENSE file.
 
-#define GLFW_INCLUDE_VULKAN
+#ifdef _WIN32
 #define GLFW_EXPOSE_NATIVE_WIN32
+#endif // _WIN32
 #include "glfw_window.hpp"
 #include "input_codes.hpp"
 #include <GLFW/glfw3.h>
@@ -28,7 +29,7 @@ static bool is_initialized = false;
 
 struct Initializer {
     Initializer() {
-        if (glfwInit() == VK_TRUE) {
+        if (glfwInit() == TRUE) {
             is_initialized = true;
         }
     }
@@ -173,10 +174,6 @@ void GLFWWindow::start() {
 
 void GLFWWindow::terminate() {
     delegate().onClose();
-}
-
-bool GLFWWindow::supports_vulkan() {
-    return glfwVulkanSupported() == GLFW_TRUE;
 }
 
 std::vector<const char*> GLFWWindow::getExtensions() const {

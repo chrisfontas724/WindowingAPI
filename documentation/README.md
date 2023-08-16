@@ -1,5 +1,5 @@
-# VulkanWindowing
-A wrapper window API for easy vulkan integration. In just a couple lines of code you can set up a run loop for a game or similar application and receive input and mouse events.
+# Windowing
+A wrapper window API for easy integration with rendering APIs such as Vulkan. In just a couple lines of code you can set up a run loop for a game or similar application and receive input and mouse events.
 
 
 # Example
