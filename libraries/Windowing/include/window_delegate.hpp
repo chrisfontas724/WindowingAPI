@@ -5,23 +5,12 @@
 #ifndef DISPLAY_WINDOW_DELEGATE_HPP_
 #define DISPLAY_WINDOW_DELEGATE_HPP_
 
+#include "window_types.hpp"
 #include <string>
 #include <stdint.h>
 #include <memory>
 #include <vector>
 #include "input_codes.hpp"
-
-#ifdef _WIN32
-#include <windows.h>
-using PlatformNativeWindowHandle = HWND;
-#elif defined(__linux__)
-#include <xcb/xcb.h>
-using PlatformNativeWindowHandle = xcb_window_t;
-#elif defined(__APPLE__)
-#import <AppKit/NSView.h>
-using PlatformNativeWindowHandle = NSView*;
-// Add other platform-specific types as needed
-#endif
 
 namespace display {
 

@@ -46,8 +46,9 @@ set(public_headers
     include/input_codes.hpp 
     include/input_manager.hpp
     include/platform.hpp
-    include/window_delegate.hpp
     include/window.hpp
+    include/window_delegate.hpp
+    include/window_types.hpp
 )
 
 target_link_libraries(Windowing PUBLIC Vulkan::Vulkan glfw)
