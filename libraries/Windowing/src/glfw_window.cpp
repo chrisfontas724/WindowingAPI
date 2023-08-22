@@ -77,6 +77,10 @@ static std::map<uint32_t, KeyCode> key_mapping = {
     {GLFW_KEY_7, KeyCode::_7},
     {GLFW_KEY_8, KeyCode::_8},
     {GLFW_KEY_9, KeyCode::_9},
+
+    // Shift and others.
+    {GLFW_KEY_LEFT_SHIFT, KeyCode::LeftShift},
+    {GLFW_KEY_RIGHT_SHIFT, KeyCode::RightShift},
 };
 
 static std::map<uint32_t, InputEventType> action_mapping = {
